@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Libros</title>
+	<link rel="stylesheet" href="css/bootstrap.min.css">
+</head>
+<body>
+	<div class="container p-5">
+		<div class="row">
+			<div class="col-5 p-4">
+				<h2>Agrega un libro</h2>
+				<form action="/api/libros" method="post">
+						  <div class="mb-3">
+						    <label for="exampleInputEmail1" class="form-label">Titulo</label>
+						    <input type="text" class="form-control" id="titulo" name="titulo" required>
+						  </div>
+						  <div class="mb-3">
+						    <label for="exampleInputPassword1" class="form-label">Descripcion</label>
+						    <textarea class="form-control" id="descripcion" name="descripcion" rows="3" required></textarea>
+						  </div>
+						  <button type="submit" class="btn btn-primary">Agregar</button>
+				</form>
+			</div>
+			<div class="col-6 offset-1 p-4">
+				<table class="table">
+				  <thead>
+				    <tr>
+				      <th scope="col">Id</th>
+				      <th scope="col">Nombre</th>
+				      <th scope="col">Accion</th>
+				    </tr>
+				  </thead>
+				  <tbody id="tabla">
+				    <tr>
+				      <th scope="row">1</th>
+				      <td>Mark</td>
+				      <td>Otto</td>
+				    </tr>
+				  </tbody>
+				</table>
+			</div>
+		</div>		
+	</div>
+	<script src="js/bootstrap.min.js"></script>
+ 	<script src="axios.min.js"></script>
+	<script>
+
+	    async function init () {
+	      const { data } = await axios.get('/api/libros', {
+	        headers: {
+	          pass: '12345'
+	        }
+	      })
+	      let libros_html = ""
+	      for (let i=0; i<data.length; i++) {
+	        libros_html += `
+	          <tr>
+	            <td scope="row">${i + 1}</td>
+	            <td>${data[i].titulo}</td>
+	            <td>${data[i].descripcion}</td>
+	          </tr>
+	        `
+	      }
+	      // console.log(libros_html)
+	      document.getElementById('tabla').innerHTML = libros_html
+	    }
+	     init()
+	</script>
+
+</body>
+</html>

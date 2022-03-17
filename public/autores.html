@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Libros</title>
+	<link rel="stylesheet" href="css/bootstrap.min.css">
+</head>
+<body>
+	<div class="container p-5">
+		<div class="row">
+			<div class="col-5 p-4">
+				<h2>Agrega un autor</h2>
+				<form action="/quotes" method="post">
+						  <div class="mb-3">
+						    <label for="exampleInputEmail1" class="form-label">Nombre</label>
+						    <input type="text" class="form-control" id="nombre_autor" name="nombre_autor" required>
+						  </div>
+						  <div class="mb-3">
+						    <label for="exampleInputEmail1" class="form-label">Apellido</label>
+						    <input type="text" class="form-control" id="apellido_autor" name="apellido_autor" required>
+						  </div>
+						  <div class="mb-3">
+						    <label for="exampleInputPassword1" class="form-label">Notas</label>
+						    <textarea class="form-control" id="notas" name="notas" rows="3" required></textarea>
+						  </div>
+						  <button type="submit" class="btn btn-primary">Agregar</button>
+				</form>
+			</div>
+			<div class="col-6 offset-1 p-4">
+				<table class="table">
+				  <thead>
+				    <tr>
+				      <th scope="col">Id</th>
+				      <th scope="col">Nombre</th>
+				      <th scope="col">Accion</th>
+				    </tr>
+				  </thead>
+				  <tbody id="tabla">
+				    <tr>
+				      <th scope="row">1</th>
+				      <td>Mark</td>
+				      <td>Otto</td>
+				    </tr>
+				  </tbody>
+				</table>
+			</div>
+		</div>		
+	</div>
+
+</body>
+</html>
