@@ -46,4 +46,16 @@ async function get_autores() {
   client.release()
   return rows
 }
-module.exports = {agregar_libro, get_libros, agregar_autor, get_autores}
+async function add_libro_autor (libro_id, autor_id){
+  const libroId = parseInt(libro_id)
+  const autorId = parseInt(autor_id)
+  const client = await pool.connect()
+  await client.query({
+    text: `insert into escriben (libro_id, autor_id) values ($1, $2)
+          returning *`,
+    values:[libroId, autorId]
+  })
+  client.release()
+}
+
+module.exports = {agregar_libro, get_libros, agregar_autor, get_autores, add_libro_autor}
