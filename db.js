@@ -22,10 +22,28 @@ async function agregar_libro (titulo, descripcion) {
   return rows[0]
 }
 
+async function agregar_autor (nombre, apellido, notas) {
+  const client = await pool.connect()
+  const { rows } = await client.query({
+    text: `insert into autores (nombre, apellido, notas) values ($1, $2, $3)
+          returning *`,
+    values: [nombre, apellido, notas]
+  })
+  client.release()
+  return rows[0]
+}
+
 async function get_libros() {
   const client = await pool.connect()
   const { rows } = await client.query('select * from libros')
   client.release()
   return rows
 }
-module.exports = {agregar_libro, get_libros}
+
+async function get_autores() {
+  const client = await pool.connect()
+  const { rows } = await client.query('select * from autores')
+  client.release()
+  return rows
+}
+module.exports = {agregar_libro, get_libros, agregar_autor, get_autores}

@@ -11,7 +11,7 @@
 		<div class="row">
 			<div class="col-5 p-4">
 				<h2>Agrega un autor</h2>
-				<form action="/quotes" method="post">
+				<form action="/api/autores" method="post">
 						  <div class="mb-3">
 						    <label for="exampleInputEmail1" class="form-label">Nombre</label>
 						    <input type="text" class="form-control" id="nombre_autor" name="nombre_autor" required>
@@ -47,6 +47,33 @@
 			</div>
 		</div>		
 	</div>
+	<script src="js/bootstrap.min.js"></script>
+ 	<script src="axios.min.js"></script>
+	<script>
+
+	    async function init () {
+	      const { data } = await axios.get('/api/autores', {
+	        headers: {
+	          pass: '12345'
+	        }
+	      })
+	      // console.log(data)
+	      let autores_html = ""
+	      for (let i=0; i<data.length; i++) {
+	        autores_html += `
+	          <tr>
+	            <td scope="row">${i + 1}</td>
+	            <td>${data[i].nombre}</td>
+	            <td>${data[i].apellido}</td>
+	            <td>${data[i].notas}</td>
+	          </tr>
+	        `
+	      }
+	      // console.log(libros_html)
+	      document.getElementById('tabla').innerHTML = autores_html
+	    }
+	     init()
+	</script>
 
 </body>
 </html>

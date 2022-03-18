@@ -1,6 +1,6 @@
 const express = require('express')
 const bodyParser = require('body-parser');
-const {agregar_libro, get_libros} = require('./db.js')
+const {agregar_libro, get_libros, agregar_autor, get_autores} = require('./db.js')
 
 const app = express()
 app.use(express.static('public'))
@@ -16,14 +16,16 @@ app.get('/api/libros', async (req, res) => {
 	res.status(200).json(libros)
 })
 app.get('/api/autores', async (req, res) => {
-	res.redirect('/autores.html')
+	const autores = await get_autores()
+	res.status(200).json(autores)
 })
 app.post('/api/libros', async (req, res) => {
 	await agregar_libro(req.body.titulo, req.body.descripcion)
 	res.redirect('/index.html')
 })
 app.post('/api/autores', async (req, res) => {
-	res.json({todo: 'ok'})
+	await agregar_autor(req.body.nombre_autor, req.body.apellido_autor, req.body.notas)
+	res.redirect('/autores.html')
 })
 
 app.listen(3000, () => console.log('Servidor ejecutado en puerto 3000'))
