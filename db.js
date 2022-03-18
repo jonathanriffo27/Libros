@@ -57,5 +57,18 @@ async function add_libro_autor (libro_id, autor_id){
   })
   client.release()
 }
+async function get_libro(libro_id){
+  const libroId = parseInt(libro_id)
+  const client = await pool.connect()
+  const { rows } = await client.query({
+    text: `select * from libros where id = $1 `,
+    values:[libroId]
+  })
+  client.release()
+  return rows[0]
+}
 
-module.exports = {agregar_libro, get_libros, agregar_autor, get_autores, add_libro_autor}
+module.exports = {
+  agregar_libro, get_libros, agregar_autor, get_autores, add_libro_autor,
+  get_libro
+}

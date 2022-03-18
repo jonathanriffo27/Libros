@@ -15,8 +15,8 @@
 	    </button> -->
 	    <div class="collapse navbar-collapse ms-5" id="navbarNavAltMarkup">
 	      <div class="navbar-nav ms-2">
-	        <a class="nav-link active" aria-current="page" href="/index.html">Libros</a>
-	        <a class="nav-link" href="/autores.html">Autores</a>
+	        <a class="nav-link active" aria-current="page" href="/">Libros</a>
+	        <a class="nav-link" href="/autores">Autores</a>
 	      </div>
 	    </div>
 	  </div>
@@ -51,43 +51,20 @@
 				    </tr>
 				  </thead>
 				  <tbody id="tabla">
-				    <tr>
-				      <th scope="row">1</th>
-				      <td>Mark</td>
-				      <td>Otto</td>
-				    </tr>
+				    {%for autor in autores%}
+					    <tr>
+					      <th scope="row">{{autor.id}}</th>
+					      <td>{{autor.nombre}}</td>
+					      <td>{{autor.apellido}}</td>
+					      <td>{{autor.notas}}</td>
+					      <td><a href="">Link</a></td>
+					    </tr>
+					{% endfor %}
 				  </tbody>
 				</table>
 			</div>
 		</div>		
 	</div>
-	<script src="js/bootstrap.min.js"></script>
- 	<script src="axios.min.js"></script>
-	<script>
-
-	    async function init () {
-	      const { data } = await axios.get('/api/autores', {
-	        headers: {
-	          pass: '12345'
-	        }
-	      })
-	      // console.log(data)
-	      let autores_html = ""
-	      for (let i=0; i<data.length; i++) {
-	        autores_html += `
-	          <tr>
-	            <td scope="row">${i + 1}</td>
-	            <td>${data[i].nombre}</td>
-	            <td>${data[i].apellido}</td>
-	            <td>${data[i].notas}</td>
-	          </tr>
-	        `
-	      }
-	      // console.log(libros_html)
-	      document.getElementById('tabla').innerHTML = autores_html
-	    }
-	     init()
-	</script>
 
 </body>
 </html>

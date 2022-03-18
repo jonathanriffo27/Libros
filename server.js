@@ -1,15 +1,49 @@
 const express = require('express')
-const bodyParser = require('body-parser');
-const {agregar_libro, get_libros, agregar_autor, get_autores, add_libro_autor} = require('./db.js')
+const path = require("path")
+const nunjucks = require("nunjucks")
+const bodyParser = require('body-parser')
+const {
+	agregar_libro, get_libros, agregar_autor, get_autores, add_libro_autor,
+	get_libro
+} = require('./db.js')
 
 const app = express()
-app.use(express.static('public'))
+app.use(express.static('public_'))
 app.use(express.static('node_modules/bootstrap/dist'))
 app.use(express.static('node_modules/axios/dist'))
 app.use(bodyParser.urlencoded({ extended: true }));
 
+// se configura nunjucks
+nunjucks.configure(path.resolve("templates"), {
+  express: app,
+  autoscape: true,
+  noCache: false,
+  watch: true,
+});
 
 app.use(express.json())
+
+// Ejemplo
+app.get("/", async (req,res)=>{
+	const libros = await get_libros()
+  res.render('index.html', {libros});
+ });
+app.get("/autores", async (req,res)=>{
+	const autores = await get_autores()
+	console.log(autores)
+  	res.render('autores.html', {autores});
+ });
+app.get("/libro/:libro_id", async (req,res)=>{
+	const libro = await get_libro(req.params.libro_id)
+	const autores = await get_autores()
+	// console.log(libro)
+  res.render('libro.html', {libro, autores});
+ });
+app.get("/libro", async (req,res)=>{
+	const libro ="";
+	// console.log(libro)
+  res.render('libro.html', {libro});
+ });
 
 app.get('/api/libros', async (req, res) => {
 	const libros = await get_libros()
