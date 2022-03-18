@@ -40,9 +40,24 @@ async function get_libros() {
   return rows
 }
 
-async function get_autores() {
+async function get_autores(id) {
   const client = await pool.connect()
   const { rows } = await client.query('select * from autores')
+  client.release()
+  return rows
+}
+async function get_autores_libro(id) {
+  const libro_id = parseInt(id)
+  const client = await pool.connect()
+  const autor_id = await client.query({
+    text:'select autor_id from escriben where libro_id = $1',
+    values:[id]
+  })
+  const autor = autor_id.rows[0].autor_id
+  const { rows } = await client.query({
+    text:'select * from autores where not id = $1',
+    values:[autor]
+  })
   client.release()
   return rows
 }
@@ -67,8 +82,18 @@ async function get_libro(libro_id){
   client.release()
   return rows[0]
 }
+async function get_libro_autor(libro_id){
+  const libroId = parseInt(libro_id)
+  const client = await pool.connect()
+  const { rows } = await client.query({
+    text: `select nombre, apellido from escriben join autores on escriben.autor_id = autores.id where libro_id = $1`,
+    values:[libroId]
+  })
+  client.release()
+  return rows
+}
 
 module.exports = {
   agregar_libro, get_libros, agregar_autor, get_autores, add_libro_autor,
-  get_libro
+  get_libro, get_libro_autor, get_autores_libro
 }
