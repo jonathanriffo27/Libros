@@ -40,7 +40,9 @@
 					      <td>{{autor.nombre}}</td>
 					      <td>{{autor.apellido}}</td>
 					      <td>{{autor.notas}}</td>
-					      <td><a href="/autor/{{autor.id}}">Ver</a></td>
+					      <form action="/eliminar2/{{autor.id}}">
+					      	<td class="text-center"><a href="/autor/{{autor.id}}">Ver</a><br><button class="btn btn-link btn-sm">Quitar</button></td>
+					      </form>
 					    </tr>
 					{% endfor %}
 				  </tbody>

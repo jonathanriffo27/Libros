@@ -5,7 +5,8 @@ const bodyParser = require('body-parser')
 const {
 	agregar_libro, get_libros, agregar_autor, get_autores, add_libro_autor, 
 	get_libro, get_autores_no_libro, get_autores_libro, get_autor, 
-	get_libros_autor, get_libros_no_autor, eliminar_autor
+	get_libros_autor, get_libros_no_autor, eliminar_escriben, eliminar_libro,
+	eliminar_autor
 } = require('./db.js')
 
 const app = express()
@@ -89,8 +90,22 @@ app.get("/prestamos", async (req,res)=>{
   res.render('prestamos.html', {});
 });
 app.post("/eliminar/:libro_id/:autor_id", async (req,res)=>{
-	await eliminar_autor(req.params.libro_id, req.params.autor_id)
+	await eliminar_escriben(req.params.libro_id, req.params.autor_id)
   res.redirect(`/libro/${req.params.libro_id}`);
+});
+app.post("/eliminar2/:libro_id/:autor_id", async (req,res)=>{
+	await eliminar_escriben(req.params.libro_id, req.params.autor_id)
+  res.redirect(`/autor/${req.params.autor_id}`);
+});
+app.get("/eliminar/:libro_id", async (req,res)=>{
+	// console.log(req.params.libro_id)
+	await eliminar_libro(req.params.libro_id)
+  res.redirect(`/`);
+});
+app.get("/eliminar2/:autor_id", async (req,res)=>{
+	// console.log(req.params.libro_id)
+	await eliminar_autor(req.params.autor_id)
+  res.redirect(`/autores`);
 });
 
 app.listen(3000, () => console.log('Servidor ejecutado en puerto 3000'))

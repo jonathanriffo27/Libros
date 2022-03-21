@@ -34,7 +34,9 @@
 					      <th scope="row">{{libro.id}}</th>
 					      <td>{{libro.titulo}}</td>
 					      <td>{{libro.descripcion}}</td>
-					      <td><a href="/libro/{{libro.id}}">Ver</a></td>
+					      <form action="/eliminar/{{libro.id}}">
+					      	<td class="text-center"><a href="/libro/{{libro.id}}">Ver</a><br><button class="btn btn-link btn-sm">Quitar</button></td>
+					      </form>
 					    </tr>
 					{% endfor %}
 				  </tbody>
