@@ -131,9 +131,20 @@ async function get_libros_no_autor(autor_id) {
   // console.log(rows)
   return rows
 }
+async function eliminar_autor (libro_id, autor_id) {
+  const libroId = parseInt(libro_id)
+  const autorId = parseInt(autor_id)
+  const client = await pool.connect()
+  await client.query({
+    text: `delete from escriben where libro_id = $1 and autor_id = $2`,
+    values: [libroId, autorId]
+  })
+  client.release()
+  return
+}
 
 module.exports = {
   agregar_libro, get_libros, agregar_autor, get_autores, add_libro_autor, 
-  get_libro, get_autores_no_libro, get_autores_libro,
-  get_autor, get_libros_autor, get_libros_no_autor
+  get_libro, get_autores_no_libro, get_autores_libro, get_autor, 
+  get_libros_autor, get_libros_no_autor, eliminar_autor
 }

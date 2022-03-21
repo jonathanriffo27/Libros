@@ -18,7 +18,8 @@
 			<h4>Libros:</h4>
 			<ul>
 				{%for libro in libros%}
-					<li>{{libro.titulo}}</li>
+					<form action="/eliminar/{{libro.id}}/{{autor.id}}" method="post">
+					<li>{{libro.titulo}}<button class="btn btn-link">Quitar</button></li>
 				{%endfor%}  
 			</ul>
 			<form action="/{{autor.id}}/add_libro" method="post">

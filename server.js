@@ -4,8 +4,8 @@ const nunjucks = require("nunjucks")
 const bodyParser = require('body-parser')
 const {
 	agregar_libro, get_libros, agregar_autor, get_autores, add_libro_autor, 
-	get_libro, get_autores_no_libro, get_autores_libro, 
-	get_autor, get_libros_autor, get_libros_no_autor
+	get_libro, get_autores_no_libro, get_autores_libro, get_autor, 
+	get_libros_autor, get_libros_no_autor, eliminar_autor
 } = require('./db.js')
 
 const app = express()
@@ -28,18 +28,18 @@ app.use(express.json())
 app.get("/", async (req,res)=>{
 	const libros = await get_libros()
   res.render('libros.html', {libros});
- });
+});
 app.get("/autores", async (req,res)=>{
 	const autores = await get_autores()
   res.render('autores.html', {autores});
- });
+});
 app.get("/libro/:libro_id", async (req,res)=>{
 	const libro = await get_libro(req.params.libro_id)
 	const autores = await get_autores_libro(req.params.libro_id)
 	const otros_autores = await get_autores_no_libro(req.params.libro_id)
 	// console.log(otros_autores)
   res.render('libro.html', {libro, autores, otros_autores});
- });
+});
 app.get("/autor/:autor_id", async (req,res)=>{
 	const autor = await get_autor(req.params.autor_id)
 	// console.log(req.params.autor_id)
@@ -47,7 +47,7 @@ app.get("/autor/:autor_id", async (req,res)=>{
 	const otros_libros = await get_libros_no_autor(req.params.autor_id)
 	// console.log(otros_libros)
   res.render('autor.html', {autor, libros, otros_libros});
- });
+});
 app.get('/api/libros', async (req, res) => {
 	const libros = await get_libros()
 	res.status(200).json(libros)
@@ -67,9 +67,8 @@ app.post('/api/autores', async (req, res) => {
 app.post('/api/escribir/:libro_id/:autor_id', async (req, res) => {
 	const autorId = req.body.autor_id
 	const libroId = req.params.libro_id
-	console.log(autorId, libroId)
+	// console.log(autorId, libroId)
 	await add_libro_autor (autorId, libroId)
-
 	res.redirect(`/libro/${req.params.libro_id}`)
 })
 app.post("/:autor_id/add_libro", async (req,res)=>{
@@ -78,16 +77,20 @@ app.post("/:autor_id/add_libro", async (req,res)=>{
 	// console.log('aqui')
 	await add_libro_autor (libroId, autorId)
   res.redirect('/autor/'+autorId)
- });
+});
 app.post("/:libro_id/:autor_id", async (req,res)=>{
 	const autorId = req.body.autor_id
 	const libroId = req.params.libro_id
 	// console.log(autorId, libroId)
 	await add_libro_autor (libroId, autorId)
   res.redirect('/libro/'+libroId)
- });
+});
 app.get("/prestamos", async (req,res)=>{
   res.render('prestamos.html', {});
- });
+});
+app.post("/eliminar/:libro_id/:autor_id", async (req,res)=>{
+	await eliminar_autor(req.params.libro_id, req.params.autor_id)
+  res.redirect(`/libro/${req.params.libro_id}`);
+});
 
 app.listen(3000, () => console.log('Servidor ejecutado en puerto 3000'))

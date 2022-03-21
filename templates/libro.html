@@ -16,11 +16,13 @@
 				</div>
 			</div>
 			<h4>Autores:</h4>
-			<ul>
-				{%for autorr in autores%}
-					<li>{{autorr.nombre}} {{autorr.apellido}}</li>
-				{%endfor%}  
-			</ul>
+				<ul>
+					{%for autorr in autores%}
+						<form action="/eliminar/{{libro.id}}/{{autorr.id}}" method="post">
+							<li>{{autorr.nombre}} {{autorr.apellido}}<button style="" class="btn btn-link">Quitar</button></li>
+						</form>
+					{%endfor%}  
+				</ul>
 			<form action="/{{libro.id}}/:autor_id" method="post">
 				<div class="row">
 					<div class="col-4">		
