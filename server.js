@@ -27,11 +27,11 @@ app.use(express.json())
 // Ejemplo
 app.get("/", async (req,res)=>{
 	const libros = await get_libros()
-  res.render('index.html', {libros});
+  res.render('libros.html', {libros});
  });
 app.get("/autores", async (req,res)=>{
 	const autores = await get_autores()
-  	res.render('autores.html', {autores});
+  res.render('autores.html', {autores});
  });
 app.get("/libro/:libro_id", async (req,res)=>{
 	const libro = await get_libro(req.params.libro_id)
@@ -85,6 +85,9 @@ app.post("/:libro_id/:autor_id", async (req,res)=>{
 	// console.log(autorId, libroId)
 	await add_libro_autor (libroId, autorId)
   res.redirect('/libro/'+libroId)
+ });
+app.get("/prestamos", async (req,res)=>{
+  res.render('prestamos.html', {});
  });
 
 app.listen(3000, () => console.log('Servidor ejecutado en puerto 3000'))
