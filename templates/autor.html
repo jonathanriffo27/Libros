@@ -15,8 +15,8 @@
 	    </button> -->
 	    <div class="collapse navbar-collapse ms-5" id="navbarNavAltMarkup">
 	      <div class="navbar-nav ms-2">
-	        <a class="nav-link active" aria-current="page" href="/">Libros</a>
-	        <a class="nav-link" href="/autores">Autores</a>
+	        <a class="nav-link " aria-current="page" href="/">Libros</a>
+	        <a class="nav-link active" href="/autores">Autores</a>
 	      </div>
 	    </div>
 	  </div>
@@ -36,16 +36,16 @@
 			</div>
 			<h4>Libros:</h4>
 			<ul>
-				{%for libro in autor_libro%}
+				{%for libro in libros%}
 					<li>{{libro.titulo}}</li>
 				{%endfor%}  
 			</ul>
-			<form action="/{{libro.id}}/:autor_id" method="post">
+			<form action="/{{autor.id}}/add_libro" method="post">
 				<div class="row">
 					<div class="col-4">		
-						<select class="form-select" aria-label="Default select example" name="autor_id">
+						<select class="form-select" aria-label="Default select example" name="libro_id">
 							  <option selected>Selecciona el libro</option>
-								{%for libro in libros%}
+								{%for libro in otros_libros%}
 							  		<option value="{{libro.id}}">{{libro.titulo}}</option>
 								{%endfor%}  
 						</select>	

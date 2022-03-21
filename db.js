@@ -49,41 +49,20 @@ async function get_autores(id) {
 async function get_autores_libro(id) {
   const libro_id = parseInt(id)
   const client = await pool.connect()
-  const autor_id = await client.query({
-    text:'select autor_id from escriben where libro_id = $1',
+  const {rows} = await client.query({
+    text:'select autores.id, nombre, apellido from escriben join autores on autores.id = escriben.autor_id where libro_id = $1',
     values:[libro_id]
   })
-  // console.log(autor_id)
-  let autor = ""
-  if(autor_id.rows[0] == undefined ){
-    autor = 0;
-  }else{
-   autor = autor_id.rows[0].autor_id
-  }
-  const { rows } = await client.query({
-    text:'select * from autores where not id = $1',
-    values:[autor]
-  })
+  
   client.release()
   return rows
 }
 async function get_libros_autor(id) {
   const autor_id = parseInt(id)
   const client = await pool.connect()
-  const libro_id = await client.query({
-    text:'select libro_id from escriben where autor_id = $1',
-    values:[id]
-  })
-  // console.log(libro_id.rows[0])
-  let libro = ""
-  if(libro_id.rows[0] == undefined ){
-    libro = 0;
-  }else{
-   libro = libro_id.rows[0].libro_id
-  }
-  const { rows } = await client.query({
-    text:'select * from libros where not id = $1',
-    values:[libro]
+  const {rows}= await client.query({
+    text:'select libros.id, titulo from escriben join libros on libros.id = escriben.libro_id where autor_id = $1',
+    values:[autor_id]
   })
   client.release()
   return rows
@@ -99,6 +78,17 @@ async function add_libro_autor (libro_id, autor_id){
   })
   client.release()
 }
+// async function add_autor_libro (libro_id, autor_id){
+//   const libroId = parseInt(libro_id)
+//   const autorId = parseInt(autor_id)
+//   const client = await pool.connect()
+//   await client.query({
+//     text: `insert into escriben (libro_id, autor_id) values ($1, $2)
+//           returning *`,
+//     values:[libroId, autorId]
+//   })
+//   client.release()
+// }
 async function get_libro(libro_id){
   const libroId = parseInt(libro_id)
   const client = await pool.connect()
@@ -123,25 +113,27 @@ async function get_autores_no_libro(libro_id){
   const libroId = parseInt(libro_id)
   const client = await pool.connect()
   const { rows } = await client.query({
-    text: `select nombre, apellido, autores.id from escriben join autores on escriben.autor_id = autores.id where autores.id not in (select autor_id from escriben where libro_id = $1)`,
+    text: `select * from autores where id not in (select autor_id from escriben where libro_id = $1)`,
     values:[libroId]
   })
   client.release()
   return rows
 }
-async function get_autor_libro(autor_id) {
+async function get_libros_no_autor(autor_id) {
   const autorId = parseInt(autor_id)
   const client = await pool.connect()
+  // console.log(autor_id)
   const { rows } = await client.query({
-    text: `select titulo from escriben join libros on escriben.libro_id = libros.id where autor_id = $1`,
+    text: `select * from libros where id not in (select libro_id from escriben where autor_id = $1)`,
     values:[autorId]
   })
   client.release()
+  // console.log(rows)
   return rows
 }
 
 module.exports = {
-  agregar_libro, get_libros, agregar_autor, get_autores, add_libro_autor,
-  get_libro, get_autores_no_libro, get_autores_libro, get_autor, get_libros_autor, 
-  get_autor_libro
+  agregar_libro, get_libros, agregar_autor, get_autores, add_libro_autor, 
+  get_libro, get_autores_no_libro, get_autores_libro,
+  get_autor, get_libros_autor, get_libros_no_autor
 }

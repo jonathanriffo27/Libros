@@ -3,9 +3,9 @@ const path = require("path")
 const nunjucks = require("nunjucks")
 const bodyParser = require('body-parser')
 const {
-	agregar_libro, get_libros, agregar_autor, get_autores, add_libro_autor,
-	get_libro, get_autores_no_libro, get_autores_libro, get_autor, get_libros_autor,
-	get_autor_libro
+	agregar_libro, get_libros, agregar_autor, get_autores, add_libro_autor, 
+	get_libro, get_autores_no_libro, get_autores_libro, 
+	get_autor, get_libros_autor, get_libros_no_autor
 } = require('./db.js')
 
 const app = express()
@@ -35,18 +35,18 @@ app.get("/autores", async (req,res)=>{
  });
 app.get("/libro/:libro_id", async (req,res)=>{
 	const libro = await get_libro(req.params.libro_id)
-	// console.log(req.params.libro_id)
 	const autores = await get_autores_libro(req.params.libro_id)
 	const otros_autores = await get_autores_no_libro(req.params.libro_id)
+	// console.log(otros_autores)
   res.render('libro.html', {libro, autores, otros_autores});
  });
 app.get("/autor/:autor_id", async (req,res)=>{
 	const autor = await get_autor(req.params.autor_id)
 	// console.log(req.params.autor_id)
 	const libros = await get_libros_autor(req.params.autor_id)
-	const autor_libro = await get_autor_libro(req.params.autor_id)
-	console.log(autor_libro)
-  res.render('autor.html', {autor, libros, autor_libro});
+	const otros_libros = await get_libros_no_autor(req.params.autor_id)
+	// console.log(otros_libros)
+  res.render('autor.html', {autor, libros, otros_libros});
  });
 app.get('/api/libros', async (req, res) => {
 	const libros = await get_libros()
@@ -72,12 +72,19 @@ app.post('/api/escribir/:libro_id/:autor_id', async (req, res) => {
 
 	res.redirect(`/libro/${req.params.libro_id}`)
 })
+app.post("/:autor_id/add_libro", async (req,res)=>{
+	const libroId = req.body.libro_id
+	const autorId = req.params.autor_id
+	// console.log('aqui')
+	await add_libro_autor (libroId, autorId)
+  res.redirect('/autor/'+autorId)
+ });
 app.post("/:libro_id/:autor_id", async (req,res)=>{
 	const autorId = req.body.autor_id
 	const libroId = req.params.libro_id
-	console.log(autorId, libroId)
+	// console.log(autorId, libroId)
 	await add_libro_autor (libroId, autorId)
-  	res.redirect('/libro/'+libroId)
+  res.redirect('/libro/'+libroId)
  });
 
 app.listen(3000, () => console.log('Servidor ejecutado en puerto 3000'))
