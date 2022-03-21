@@ -43,6 +43,7 @@
 				    <tr>
 				      <th scope="col">Id</th>
 				      <th scope="col">Nombre</th>
+				      <th scope="col">Descripcion</th>
 				      <th scope="col">Accion</th>
 				    </tr>
 				  </thead>
@@ -52,6 +53,7 @@
 					      <th scope="row">{{libro.id}}</th>
 					      <td>{{libro.titulo}}</td>
 					      <td>{{libro.descripcion}}</td>
+					      <td><a href="/libro/{{libro.id}}">Ver</a></td>
 					    </tr>
 					{% endfor %}
 				  </tbody>

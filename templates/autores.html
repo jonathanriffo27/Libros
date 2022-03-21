@@ -15,8 +15,8 @@
 	    </button> -->
 	    <div class="collapse navbar-collapse ms-5" id="navbarNavAltMarkup">
 	      <div class="navbar-nav ms-2">
-	        <a class="nav-link active" aria-current="page" href="/">Libros</a>
-	        <a class="nav-link" href="/autores">Autores</a>
+	        <a class="nav-link " aria-current="page" href="/">Libros</a>
+	        <a class="nav-link active" href="/autores">Autores</a>
 	      </div>
 	    </div>
 	  </div>
@@ -47,6 +47,8 @@
 				    <tr>
 				      <th scope="col">Id</th>
 				      <th scope="col">Nombre</th>
+				      <th scope="col">Apellido</th>
+				      <th scope="col">Notas</th>
 				      <th scope="col">Accion</th>
 				    </tr>
 				  </thead>
@@ -57,7 +59,7 @@
 					      <td>{{autor.nombre}}</td>
 					      <td>{{autor.apellido}}</td>
 					      <td>{{autor.notas}}</td>
-					      <td><a href="">Link</a></td>
+					      <td><a href="/autor/{{autor.id}}">Ver</a></td>
 					    </tr>
 					{% endfor %}
 				  </tbody>
